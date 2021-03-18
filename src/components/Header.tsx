@@ -28,9 +28,9 @@ export default function Header(): React.ReactElement {
       flexDirection="row"
       justifyContent="space-between"
       alignItems="center"
-      style={{ padding: '15px 20px 15px 20px', backgroundColor: '#a4d6d6' }}
+      style={{ padding: '15px 20px 8px 20px' }}
     >
-      <Text fontSize="2xl" style={{ alignSelf: 'flex-start' }}>
+      <Text fontSize="large" style={{ alignSelf: 'flex-start' }}>
         ❤️ StickyTime
       </Text>
       <Flex alignItems="flex-end">

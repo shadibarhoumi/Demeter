@@ -68,6 +68,7 @@ export const Timer = () => {
             secondsRemaining={secondsRemaining}
             setSecondsRemaining={setSecondsRemaining}
           />
+          <img src="hand.png" alt="" style={{ height: '250px', position: 'absolute', right: '10px' }} />
         </Flex>
         {stopped && <TimeInput secondsRemaining={secondsRemaining} setSecondsRemaining={setSecondsRemaining} />}
       </Flex>

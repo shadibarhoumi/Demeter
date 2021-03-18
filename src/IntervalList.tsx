@@ -26,6 +26,22 @@ const computeMinutesAndSeconds = (startedAt: number, endedAt: number) => {
   return { minutes, seconds }
 }
 
+export const IntervalItem = ({ interval }: { interval: Interval }) => {
+  const { minutes, seconds } = computeMinutesAndSeconds(interval.startedAt, interval.endedAt)
+  return (
+    <Box border="2px dashed plum" width="300px" marginBottom="10px" padding="15px">
+      <p>
+        <b>{interval.description}</b>
+      </p>
+      <p>
+        Duration: <b>{`${minutes} minutes and ${seconds} seconds`}</b>
+      </p>
+      <p>Started at {new Date(interval.startedAt).toLocaleString()}</p>
+      <p>Ended at {new Date(interval.endedAt).toLocaleString()}</p>
+    </Box>
+  )
+}
+
 export const IntervalList = () => {
   const startOfToday = new Date().setHours(0, 0, 0, 0)
   const { currentUser } = auth
@@ -40,28 +56,18 @@ export const IntervalList = () => {
   }
 
   return (
-    <div>
+    <Flex flexDirection="column" alignItems="center" marginTop="30px">
       {intervals && <TotalTime intervals={intervals} />}
-      <Text fontWeight="bold">Your Intervals Today</Text>
+      <Text fontWeight="bold" marginTop="30px">
+        Your Intervals Today
+      </Text>
       {loadingIntervals && <div>Loading...</div>}
       <Flex flexDirection="column">
         {intervals &&
-          intervals.map((interval) => {
-            const { minutes, seconds } = computeMinutesAndSeconds(interval.startedAt, interval.endedAt)
-            return (
-              <Box border="2px dashed plum" key={interval.id} width="300px" marginBottom="10px">
-                <p>
-                  <b>{interval.description}</b>
-                </p>
-                <p>
-                  Duration: <b>{`${minutes} minutes and ${seconds} seconds`}</b>
-                </p>
-                <p>Started at {new Date(interval.startedAt).toLocaleString()}</p>
-                <p>Ended at {new Date(interval.endedAt).toLocaleString()}</p>
-              </Box>
-            )
+          intervals.reverse().map((interval) => {
+            return <IntervalItem key={interval.id} interval={interval} />
           })}
       </Flex>
-    </div>
+    </Flex>
   )
 }
