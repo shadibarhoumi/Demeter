@@ -1,9 +1,9 @@
 import React from 'react'
-import { auth, firestore } from '../../firebase'
+import { auth, firestore } from '@d/firebase'
 import { Input } from '@chakra-ui/react'
 import { Button, Flex } from '@chakra-ui/react'
 import { TimeDisplay } from './TimeDisplay'
-import { TimeInput } from './TimeInput'
+import { TimeInput } from './TimerInput'
 
 export const Timer = () => {
   const DEFAULT_DURATION = 1500

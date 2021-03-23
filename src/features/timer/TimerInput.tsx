@@ -1,15 +1,12 @@
 import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@chakra-ui/react'
+import { useDispatch, useSelector } from 'react-redux'
+import type { RootState } from '@d/store'
+import { setTargetDuration } from './timerSlice'
 
-type SecondsSetter = React.Dispatch<React.SetStateAction<number | undefined>>
-
-export const TimeInput = ({
-  secondsRemaining,
-  setSecondsRemaining,
-}: {
-  secondsRemaining: number | undefined
-  setSecondsRemaining: SecondsSetter
-}) => {
-  const minutesRemaining = secondsRemaining ? secondsRemaining / 60 : 0
+export const TimerInput = () => {
+  const dispatch = useDispatch()
+  const targetDuration = useSelector((state: RootState) => state.timer.targetDuration)
+  const minutesRemaining = targetDuration ? targetDuration / 60 : 0
   return (
     <>
       <Slider
@@ -23,7 +20,7 @@ export const TimeInput = ({
         maxWidth="250px"
         focusThumbOnChange={false}
         onChange={(valueAsNumber: number) => {
-          setSecondsRemaining(valueAsNumber * 60)
+          dispatch(setTargetDuration(valueAsNumber * 60))
         }}
       >
         <SliderTrack>
