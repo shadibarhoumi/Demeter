@@ -1,8 +1,6 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
 import { TimerStatus } from './timerSlice'
 import { Box, Text } from '@chakra-ui/react'
-import type { RootState } from '@d/store'
 
 const formatTime = (seconds: number) =>
   seconds.toLocaleString('en-US', {
@@ -20,12 +18,14 @@ const Time = ({ seconds }: { seconds: number }) => {
   )
 }
 
-export const TimerDisplay = () => {
-  const secondsRemaining = useSelector((state: RootState) => state.timer.secondsRemaining)
-  const status = useSelector((state: RootState) => state.timer.status)
-  const targetDuration = useSelector((state: RootState) => state.timer.targetDuration)
-  const description = useSelector((state: RootState) => state.timer.description)
+interface Props {
+  status: string
+  secondsRemaining: number
+  targetDuration: number
+  description: string
+}
 
+export const TimerDisplay = ({ status, secondsRemaining, targetDuration, description }: Props) => {
   if (typeof window === 'undefined') return <p>Loading Display...</p>
 
   return (

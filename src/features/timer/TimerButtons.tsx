@@ -1,17 +1,17 @@
 import { Button, Flex, Input } from '@chakra-ui/react'
-import { RootState } from '@d/store'
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Timer } from './Timer'
+import { useDispatch } from 'react-redux'
 import { setTimerStatus, setDescription, TimerStatus, setSecondsRemaining } from './timerSlice'
 
-export const TimerButtons = () => {
-  const dispatch = useDispatch()
-  const targetDuration = useSelector((state: RootState) => state.timer.targetDuration)
-  const secondsRemaining = useSelector((state: RootState) => state.timer.secondsRemaining)
-  const status = useSelector((state: RootState) => state.timer.status)
-  const description = useSelector((state: RootState) => state.timer.description)
+interface Props {
+  status: string
+  secondsRemaining: number
+  targetDuration: number
+  description: string
+}
 
+export const TimerButtons = ({ status, secondsRemaining, targetDuration, description }: Props) => {
+  const dispatch = useDispatch()
   return (
     <Flex justifyContent="center">
       <Flex flexBasis="350px" justifyContent="space-around">
