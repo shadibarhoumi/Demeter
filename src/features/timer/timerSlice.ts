@@ -17,7 +17,7 @@ interface TimerState {
 
 const DEFAULT_DURATION = 1500
 
-const initialState: TimerState = {
+export const timerInitialState: TimerState = {
   status: TimerStatus.STOPPED,
   description: '',
   targetDuration: DEFAULT_DURATION,
@@ -27,7 +27,7 @@ const initialState: TimerState = {
 
 const timerSlice = createSlice({
   name: 'timer',
-  initialState,
+  initialState: timerInitialState,
   reducers: {
     setTimerStatus(state, action: PayloadAction<TimerStatus>) {
       state.status = action.payload

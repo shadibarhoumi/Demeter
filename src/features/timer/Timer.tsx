@@ -2,23 +2,14 @@ import React from 'react'
 import { TimerDisplay } from './TimerDisplay'
 import { TimerInput } from './TimerInput'
 import { TimerButtons } from './TimerButtons'
-import { TimerStatus, decrementTimer, setTimerStatus, setTargetDuration } from './timerSlice'
-import { shallowEqual, useDispatch, useSelector } from 'react-redux'
-import { RootState } from '@d/store'
+import { TimerStatus, setTimerStatus, decrementTimer } from './timerSlice'
+import { useDispatch } from 'react-redux'
 import { Flex } from '@chakra-ui/react'
+import { useTimer } from './useTimer'
 
 export const Timer = () => {
   const dispatch = useDispatch()
-  const { status, secondsRemaining, targetDuration, description } = useSelector(
-    (state: RootState) => ({
-      status: state.timer.status,
-      secondsRemaining: state.timer.secondsRemaining,
-      targetDuration: state.timer.targetDuration,
-      description: state.timer.description,
-    }),
-    shallowEqual,
-  )
-
+  const { status, secondsRemaining } = useTimer()
   React.useEffect(() => {
     let timer: number | undefined
     if (status === TimerStatus.RUNNING) {
@@ -38,19 +29,9 @@ export const Timer = () => {
   return (
     <>
       <Flex alignItems="center" flexDirection="column">
-        <TimerDisplay
-          status={status}
-          secondsRemaining={secondsRemaining}
-          targetDuration={targetDuration}
-          description={description}
-        />
-        <TimerInput status={status} targetDuration={targetDuration} />
-        <TimerButtons
-          status={status}
-          secondsRemaining={secondsRemaining}
-          targetDuration={targetDuration}
-          description={description}
-        />
+        <TimerDisplay />
+        <TimerInput />
+        <TimerButtons />
       </Flex>
     </>
   )

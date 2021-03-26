@@ -1,6 +1,7 @@
 import React from 'react'
 import { TimerStatus } from './timerSlice'
 import { Box, Text } from '@chakra-ui/react'
+import { useTimer } from './useTimer'
 
 const formatTime = (seconds: number) =>
   seconds.toLocaleString('en-US', {
@@ -18,14 +19,8 @@ const Time = ({ seconds }: { seconds: number }) => {
   )
 }
 
-interface Props {
-  status: string
-  secondsRemaining: number
-  targetDuration: number
-  description: string
-}
-
-export const TimerDisplay = ({ status, secondsRemaining, targetDuration, description }: Props) => {
+export const TimerDisplay = () => {
+  const { status, secondsRemaining, targetDuration, description } = useTimer()
   if (typeof window === 'undefined') return <p>Loading Display...</p>
 
   return (

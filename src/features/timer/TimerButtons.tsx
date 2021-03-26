@@ -2,16 +2,11 @@ import { Button, Flex, Input } from '@chakra-ui/react'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { setTimerStatus, setDescription, TimerStatus, setSecondsRemaining } from './timerSlice'
+import { useTimer } from './useTimer'
 
-interface Props {
-  status: string
-  secondsRemaining: number
-  targetDuration: number
-  description: string
-}
-
-export const TimerButtons = ({ status, secondsRemaining, targetDuration, description }: Props) => {
+export const TimerButtons = () => {
   const dispatch = useDispatch()
+  const { status, secondsRemaining, targetDuration, description } = useTimer()
   return (
     <Flex justifyContent="center">
       <Flex flexBasis="350px" justifyContent="space-around">
