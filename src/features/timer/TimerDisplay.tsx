@@ -14,7 +14,8 @@ const Time = ({ seconds, status }: { seconds: number; status: TimerStatus }) => 
   return (
     <Text fontSize="90px" width="240px" color={status === TimerStatus.COMPLETE ? 'green' : 'teal.500'}>
       <span>{minutesDisplay}</span>
-      <span>&#58;{secondsDisplay}</span>
+      <span>&#58;</span>
+      <span>{secondsDisplay}</span>
     </Text>
   )
 }
