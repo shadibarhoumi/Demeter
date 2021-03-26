@@ -21,8 +21,6 @@ const Time = ({ seconds, status }: { seconds: number; status: TimerStatus }) => 
 
 export const TimerDisplay = () => {
   const { status, secondsRemaining, targetDuration, description } = useTimer()
-  console.log('🚀 ~ file: TimerDisplay.tsx ~ line 24 ~ TimerDisplay ~ status', status)
-  // if (typeof window === 'undefined') return <p>Loading Display...</p>
 
   return (
     <>
