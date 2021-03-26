@@ -9,7 +9,7 @@ const formatTime = (seconds: number) =>
     useGrouping: false,
   })
 
-const Time = ({ seconds }: { seconds: number }) => {
+const Time = ({ seconds, status }: { seconds: number; status: TimerStatus }) => {
   const minutesDisplay = formatTime(Math.floor(seconds / 60))
   const secondsDisplay = formatTime(seconds % 60)
   return (
@@ -21,7 +21,8 @@ const Time = ({ seconds }: { seconds: number }) => {
 
 export const TimerDisplay = () => {
   const { status, secondsRemaining, targetDuration, description } = useTimer()
-  if (typeof window === 'undefined') return <p>Loading Display...</p>
+  console.log('🚀 ~ file: TimerDisplay.tsx ~ line 24 ~ TimerDisplay ~ status', status)
+  // if (typeof window === 'undefined') return <p>Loading Display...</p>
 
   return (
     <>
@@ -32,7 +33,7 @@ export const TimerDisplay = () => {
           <Text color="green">Bam! Another interval complete!</Text>
         ) : null}
       </Box>
-      <Time seconds={status === TimerStatus.STOPPED ? targetDuration : secondsRemaining} />
+      <Time seconds={status === TimerStatus.STOPPED ? targetDuration : secondsRemaining} status={status} />
     </>
   )
 }
