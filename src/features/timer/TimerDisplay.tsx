@@ -1,7 +1,6 @@
 import React from 'react'
-import { TimerStatus } from './timerSlice'
+import { TimerStatus } from './useTimer'
 import { Box, Text } from '@chakra-ui/react'
-import { useTimer } from './useTimer'
 
 const formatTime = (seconds: number) =>
   seconds.toLocaleString('en-US', {
@@ -14,14 +13,20 @@ const Time = ({ seconds, status }: { seconds: number; status: TimerStatus }) => 
   const secondsDisplay = formatTime(seconds % 60)
   return (
     <Text fontSize="90px" width="240px" color={status === TimerStatus.COMPLETE ? 'green' : 'teal.500'}>
-      {minutesDisplay}&#58;{secondsDisplay}
+      <span>{minutesDisplay}</span>
+      <span>&#58;{secondsDisplay}</span>
     </Text>
   )
 }
 
-export const TimerDisplay = () => {
-  const { status, secondsRemaining, targetDuration, description } = useTimer()
+interface Props {
+  status: TimerStatus
+  secondsRemaining: number
+  targetDuration: number
+  description: string
+}
 
+export const TimerDisplay = ({ status, secondsRemaining, targetDuration, description }: Props) => {
   return (
     <>
       <Box width="240px" display="flex" flexDirection="column">

@@ -1,12 +1,26 @@
 import { Button, Flex, Input } from '@chakra-ui/react'
 import React from 'react'
-import { useDispatch } from 'react-redux'
-import { setTimerStatus, setDescription, TimerStatus, setSecondsRemaining } from './timerSlice'
-import { useTimer } from './useTimer'
+import { TimerStatus } from './useTimer'
 
-export const TimerButtons = () => {
-  const dispatch = useDispatch()
-  const { status, secondsRemaining, targetDuration, description } = useTimer()
+interface Props {
+  status: TimerStatus
+  secondsRemaining: number
+  targetDuration: number
+  description: string
+  setSecondsRemaining: (seconds: number) => void
+  setStatus: (status: TimerStatus) => void
+  setDescription: (description: string) => void
+}
+
+export const TimerButtons = ({
+  status,
+  secondsRemaining,
+  targetDuration,
+  description,
+  setSecondsRemaining,
+  setStatus,
+  setDescription,
+}: Props) => {
   return (
     <Flex justifyContent="center">
       <Flex flexBasis="350px" justifyContent="space-around">
@@ -16,12 +30,12 @@ export const TimerButtons = () => {
             disabled={!secondsRemaining}
             onClick={() => {
               if (status === TimerStatus.STOPPED) {
-                dispatch(setSecondsRemaining(targetDuration))
+                setSecondsRemaining(targetDuration)
               }
               if (status !== TimerStatus.RUNNING) {
-                dispatch(setTimerStatus(TimerStatus.RUNNING))
+                setStatus(TimerStatus.RUNNING)
               } else {
-                dispatch(setTimerStatus(TimerStatus.PAUSED))
+                setStatus(TimerStatus.PAUSED)
               }
             }}
           >
@@ -34,16 +48,16 @@ export const TimerButtons = () => {
             style={{ margin: '0 20px' }}
             placeholder="What are you doing?"
             value={description}
-            onChange={(e) => dispatch(setDescription(e.target.value))}
+            onChange={(e) => setDescription(e.target.value)}
           />
         )}
         {(status === TimerStatus.PAUSED || status === TimerStatus.COMPLETE) && (
           <Button
             colorScheme="pink"
             onClick={() => {
-              dispatch(setSecondsRemaining(targetDuration))
-              dispatch(setTimerStatus(TimerStatus.STOPPED))
-              dispatch(setDescription(''))
+              setSecondsRemaining(targetDuration)
+              setStatus(TimerStatus.STOPPED)
+              setDescription('')
               // endInterval()
             }}
             variant="outline"

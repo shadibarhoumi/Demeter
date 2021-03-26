@@ -1,13 +1,31 @@
-import { RootState } from '@d/store'
-import { shallowEqual, useSelector } from 'react-redux'
+import { useState } from 'react'
 
-export const useTimer = () =>
-  useSelector(
-    (state: RootState) => ({
-      status: state.timer.status,
-      secondsRemaining: state.timer.secondsRemaining,
-      targetDuration: state.timer.targetDuration,
-      description: state.timer.description,
-    }),
-    shallowEqual,
-  )
+export enum TimerStatus {
+  RUNNING = 'RUNNING',
+  PAUSED = 'PAUSED',
+  COMPLETE = 'COMPLETE',
+  STOPPED = 'STOPPED',
+}
+
+const DEFAULT_DURATION = 1500
+
+export const useTimer = () => {
+  const [status, setStatus] = useState(TimerStatus.STOPPED)
+  const [secondsRemaining, setSecondsRemaining] = useState(DEFAULT_DURATION)
+  const [targetDuration, setTargetDuration] = useState(DEFAULT_DURATION)
+  const [description, setDescription] = useState('')
+
+  const decrement = () => setSecondsRemaining((remaining) => remaining - 1)
+
+  return {
+    status,
+    secondsRemaining,
+    targetDuration,
+    description,
+    setStatus,
+    setTargetDuration,
+    decrement,
+    setDescription,
+    setSecondsRemaining,
+  }
+}

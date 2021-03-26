@@ -1,11 +1,13 @@
 import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@chakra-ui/react'
-import { setTargetDuration, TimerStatus } from './timerSlice'
-import { useDispatch } from 'react-redux'
-import { useTimer } from './useTimer'
+import { TimerStatus } from './useTimer'
 
-export const TimerInput = () => {
-  const dispatch = useDispatch()
-  const { status, targetDuration } = useTimer()
+interface Props {
+  status: TimerStatus
+  targetDuration: number
+  setTargetDuration: (duration: number) => void
+}
+
+export const TimerInput = ({ status, targetDuration, setTargetDuration }: Props) => {
   const minutesRemaining = targetDuration ? targetDuration / 60 : 0
   if (status !== TimerStatus.STOPPED) return null
   return (
@@ -21,7 +23,7 @@ export const TimerInput = () => {
         maxWidth="250px"
         focusThumbOnChange={false}
         onChange={(valueAsNumber: number) => {
-          dispatch(setTargetDuration(valueAsNumber * 60))
+          setTargetDuration(valueAsNumber * 60)
         }}
       >
         <SliderTrack>
