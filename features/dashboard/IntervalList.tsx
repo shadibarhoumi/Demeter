@@ -1,8 +1,8 @@
-import { auth, firestore } from '../../firebase'
+import { auth, firestore } from '@lib/firebase'
 import { Box, Flex, Text } from '@chakra-ui/react'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import React from 'react'
-import { Interval } from '../../models/Interval'
+import { Interval } from '@models/Interval'
 
 export const TotalTime = ({ intervals }: { intervals: Interval[] }) => {
   const totalMilliseconds = intervals.reduce((total: number, interval) => {

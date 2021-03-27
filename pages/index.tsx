@@ -1,9 +1,12 @@
 import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import styles from '@styles/Home.module.css'
 import { Button } from '@chakra-ui/react'
 import Link from 'next/link'
+import { useContext } from 'react'
+import { UserContext } from '@lib/context'
 
 export default function Home() {
+  const { user } = useContext(UserContext)
   return (
     <div className={styles.container}>
       <Head>
@@ -17,7 +20,7 @@ export default function Home() {
 
         <p className={styles.description}>A tool to help you put the hours in and reach your potential.</p>
 
-        <Link href="/login">
+        <Link href={user ? '/timer' : '/enter'}>
           <Button
             colorScheme="teal"
             size="lg"

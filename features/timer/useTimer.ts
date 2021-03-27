@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 export enum TimerStatus {
   RUNNING = 'RUNNING',
@@ -15,7 +15,24 @@ export const useTimer = () => {
   const [targetDuration, setTargetDuration] = useState(DEFAULT_DURATION)
   const [description, setDescription] = useState('')
 
+  // call decrement every second when timer is running
   const decrement = () => setSecondsRemaining((remaining) => remaining - 1)
+  useEffect(() => {
+    let timer: number | undefined
+    if (status === TimerStatus.RUNNING) {
+      timer = window.setInterval(decrement, 1000)
+    } else {
+      clearInterval(timer)
+    }
+    return () => clearInterval(timer)
+  }, [status])
+
+  // set status to complete if time has run out
+  useEffect(() => {
+    if (status === TimerStatus.RUNNING && secondsRemaining <= 0) {
+      setStatus(TimerStatus.COMPLETE)
+    }
+  }, [secondsRemaining, status])
 
   return {
     status,
@@ -24,7 +41,6 @@ export const useTimer = () => {
     description,
     setStatus,
     setTargetDuration,
-    decrement,
     setDescription,
     setSecondsRemaining,
   }

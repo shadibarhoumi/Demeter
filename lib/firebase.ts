@@ -1,4 +1,4 @@
-import firebase from 'firebase'
+import firebase from 'firebase/app'
 import 'firebase/firestore'
 import 'firebase/auth'
 
@@ -16,3 +16,4 @@ if (!firebase.apps.length) {
 
 export const auth = firebase.auth()
 export const firestore = firebase.firestore()
+export const googleAuthProvider = new firebase.auth.GoogleAuthProvider()
