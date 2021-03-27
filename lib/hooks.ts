@@ -22,11 +22,3 @@ export const useUserData = () => {
 
   return { user, username }
 }
-
-export function usePrevious<T>(value: T) {
-  const prevRef = useRef<T>()
-  useEffect(() => {
-    prevRef.current = value
-  }, [value])
-  return prevRef.current
-}

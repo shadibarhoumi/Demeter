@@ -27,7 +27,7 @@ const computeMinutesAndSeconds = (startedAt: number, endedAt: number) => {
 }
 
 export const IntervalItem = ({ interval, handleDelete }: { interval: Interval; handleDelete: () => void }) => {
-  const { minutes, seconds } = computeMinutesAndSeconds(interval.startedAt, interval.endedAt)
+  const { minutes, seconds } = computeMinutesAndSeconds(interval.startedAt, interval.endedAt!)
   return (
     <Box position="relative" border="2px dashed plum" width="300px" marginBottom="10px">
       <Flex
@@ -56,7 +56,7 @@ export const IntervalItem = ({ interval, handleDelete }: { interval: Interval; h
         Duration: <b>{`${minutes} minutes and ${seconds} seconds`}</b>
       </p>
       <p>Started at {new Date(interval.startedAt).toLocaleString()}</p>
-      <p>Ended at {new Date(interval.endedAt).toLocaleString()}</p>
+      <p>Ended at {new Date(interval.endedAt!).toLocaleString()}</p>
     </Box>
   )
 }

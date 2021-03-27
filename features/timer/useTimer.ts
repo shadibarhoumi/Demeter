@@ -27,13 +27,6 @@ export const useTimer = () => {
     return () => clearInterval(timer)
   }, [status])
 
-  // set status to complete if time has run out
-  useEffect(() => {
-    if (status === TimerStatus.RUNNING && secondsRemaining <= 0) {
-      setStatus(TimerStatus.COMPLETE)
-    }
-  }, [secondsRemaining, status])
-
   return {
     status,
     secondsRemaining,
