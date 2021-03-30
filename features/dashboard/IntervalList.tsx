@@ -3,6 +3,7 @@ import { Box, Flex, Text } from '@chakra-ui/react'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import React from 'react'
 import { Interval } from '@models/Interval'
+import { useUserData } from '@lib/hooks'
 
 export const TotalTime = ({ intervals }: { intervals: Interval[] }) => {
   const totalMilliseconds = intervals.reduce((total: number, interval) => {
@@ -63,16 +64,17 @@ export const IntervalItem = ({ interval, handleDelete }: { interval: Interval; h
 
 export const IntervalList = () => {
   const startOfToday = new Date().setHours(0, 0, 0, 0)
-  const { currentUser } = auth
-  const intervalsRef = firestore.collection('users').doc(currentUser?.uid).collection('intervals')
+  const { user } = useUserData()
+  const intervalsRef = firestore.collection('users').doc(user?.uid).collection('intervals')
 
-  const query = intervalsRef.where('startedAt', '>', startOfToday).where('complete', '==', true).orderBy('startedAt')
+  const query = intervalsRef.where('startedAt', '>', startOfToday).orderBy('startedAt')
 
   const deleteInterval = (id: string) => () => intervalsRef.doc(id).delete()
 
   const [intervals, loadingIntervals, error] = useCollectionData<Interval>(query, { idField: 'id' })
+  console.log({ intervals })
 
-  if (!currentUser) {
+  if (!user) {
     return <p>Loading...</p>
   }
 

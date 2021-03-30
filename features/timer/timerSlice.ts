@@ -54,7 +54,7 @@ const timerSlice = createSlice({
 })
 
 export const resetInterval = () => async (dispatch: Dispatch, getState: () => RootState) => {
-  dispatch(setTimerStatus(TimerStatus.STOPPED))
+  const { status } = getState().timer
   if (status !== TimerStatus.COMPLETE) {
     const { uid } = getState().userData.user!
     const { description, targetDuration, secondsRemaining, startedAt } = getState().timer
@@ -66,6 +66,7 @@ export const resetInterval = () => async (dispatch: Dispatch, getState: () => Ro
       startedAt,
     })
   }
+  dispatch(setTimerStatus(TimerStatus.STOPPED))
 }
 
 export const completeInterval = () => async (dispatch: Dispatch, getState: () => RootState) => {
