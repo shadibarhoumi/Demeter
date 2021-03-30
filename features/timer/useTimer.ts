@@ -1,4 +1,6 @@
+import { RootState } from '@features/store'
 import { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 
 export enum TimerStatus {
   RUNNING = 'RUNNING',
@@ -10,6 +12,8 @@ export enum TimerStatus {
 const DEFAULT_DURATION = 1500
 
 export const useTimer = () => {
+  // const { status, secondsRemaining, targetDuration, description } = useSelector((state: RootState) => state.timer)
+
   const [status, setStatus] = useState(TimerStatus.STOPPED)
   const [secondsRemaining, setSecondsRemaining] = useState(DEFAULT_DURATION)
   const [targetDuration, setTargetDuration] = useState(DEFAULT_DURATION)

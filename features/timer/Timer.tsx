@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { TimerDisplay } from './TimerDisplay'
 import { TimerInput } from './TimerInput'
 import { TimerButtons } from './TimerButtons'
