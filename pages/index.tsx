@@ -2,11 +2,10 @@ import Head from 'next/head'
 import styles from '@styles/Home.module.css'
 import { Button } from '@chakra-ui/react'
 import Link from 'next/link'
-import { useContext } from 'react'
-import { UserContext } from '@lib/context'
+import { useUserData } from '@lib/hooks'
 
 export default function Home() {
-  const { user } = useContext(UserContext)
+  const { user } = useUserData()
   return (
     <div className={styles.container}>
       <Head>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { TimerStatus } from './useTimer'
+import { TimerStatus, useTimer } from './useTimer'
 import { Box, Text } from '@chakra-ui/react'
 
 const formatTime = (seconds: number) =>
@@ -20,14 +20,8 @@ const Time = ({ seconds, status }: { seconds: number; status: TimerStatus }) => 
   )
 }
 
-interface Props {
-  status: TimerStatus
-  secondsRemaining: number
-  targetDuration: number
-  description: string
-}
-
-export const TimerDisplay = ({ status, secondsRemaining, targetDuration, description }: Props) => {
+export const TimerDisplay = () => {
+  const { status, secondsRemaining, targetDuration, description } = useTimer()
   return (
     <>
       <Box width="240px" display="flex" flexDirection="column">

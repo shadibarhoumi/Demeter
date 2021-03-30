@@ -3,26 +3,17 @@ import { TimerDisplay } from './TimerDisplay'
 import { TimerInput } from './TimerInput'
 import { TimerButtons } from './TimerButtons'
 import { Flex } from '@chakra-ui/react'
-import { TimerStatus, useTimer } from './useTimer'
+import { TimerStatus, useTimer, useCountdown } from './useTimer'
 import { firestore } from '@lib/firebase'
-import { UserContext } from '@lib/context'
+import { useUserData } from '@lib/hooks'
 import { IntervalInput } from '@models/Interval'
 
 export const Timer = () => {
-  const {
-    status,
-    setStatus,
-    secondsRemaining,
-    setSecondsRemaining,
-    targetDuration,
-    setTargetDuration,
-    description,
-    setDescription,
-  } = useTimer()
+  const { setStatus, setSecondsRemaining, setTargetDuration, setDescription, setStartedAt } = useTimer()
+  useCountdown()
   const [loading, setLoading] = useState(true)
-  const [startedAt, setStartedAt] = useState<number>(Date.now())
   const { RUNNING, COMPLETE } = TimerStatus
-  const { user } = useContext(UserContext)
+  const { user } = useUserData()
 
   // fetch currentInterval, if exists, after first render
   useEffect(() => {
@@ -69,61 +60,6 @@ export const Timer = () => {
     fetchCurrentInterval()
   }, [])
 
-  const createInterval = async ({
-    status,
-    description,
-    targetDuration,
-    secondsRemaining,
-  }: Pick<IntervalInput, 'status' | 'description' | 'targetDuration' | 'secondsRemaining'>) => {
-    const currentIntervalRef = firestore.collection('currentIntervals').doc(user?.uid)
-    // when status changes from stopped to running, create an interval
-    // save time that timer started
-    const startedNow = Date.now()
-    setStartedAt(startedNow)
-    const newInterval: IntervalInput = {
-      status,
-      description,
-      targetDuration,
-      secondsRemaining,
-      startedAt: startedNow,
-      endedAt: null,
-    }
-    await currentIntervalRef.set(newInterval)
-  }
-
-  const saveAndDeleteInterval = async ({
-    status,
-    description,
-    targetDuration,
-    secondsRemaining,
-    startedAt,
-  }: {
-    status: TimerStatus
-    description: string
-    targetDuration: number
-    secondsRemaining: number
-    startedAt: number
-  }) => {
-    const currentIntervalRef = firestore.collection('currentIntervals').doc(user?.uid)
-    const userIntervalsRef = firestore.collection('users').doc(user?.uid).collection('intervals')
-    userIntervalsRef.add({
-      status,
-      description,
-      targetDuration,
-      secondsRemaining,
-      startedAt,
-      endedAt: Date.now(),
-    })
-    await currentIntervalRef.delete()
-    setSecondsRemaining(targetDuration)
-    setDescription('')
-  }
-
-  const updateInterval = async ({ status, secondsRemaining }: { status: TimerStatus; secondsRemaining: number }) => {
-    const currentIntervalRef = firestore.collection('currentIntervals').doc(user?.uid)
-    await currentIntervalRef.update({ status, secondsRemaining })
-  }
-
   if (loading) {
     return <p>Loading...</p>
   }
@@ -131,26 +67,9 @@ export const Timer = () => {
   return (
     <>
       <Flex alignItems="center" flexDirection="column">
-        <TimerDisplay
-          status={status}
-          secondsRemaining={secondsRemaining}
-          targetDuration={targetDuration}
-          description={description}
-        />
-        <TimerInput status={status} targetDuration={targetDuration} setTargetDuration={setTargetDuration} />
-        <TimerButtons
-          status={status}
-          secondsRemaining={secondsRemaining}
-          targetDuration={targetDuration}
-          description={description}
-          startedAt={startedAt}
-          setSecondsRemaining={setSecondsRemaining}
-          setStatus={setStatus}
-          setDescription={setDescription}
-          handleToggle={updateInterval}
-          handleCreate={createInterval}
-          handleReset={saveAndDeleteInterval}
-        />
+        <TimerDisplay />
+        <TimerInput />
+        <TimerButtons />
       </Flex>
     </>
   )

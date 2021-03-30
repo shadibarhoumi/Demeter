@@ -1,12 +1,12 @@
 import { firestore, auth, googleAuthProvider } from '@lib/firebase'
 import toast from 'react-hot-toast'
-import React, { useContext, useEffect, useState, useCallback } from 'react'
-import { UserContext } from '@lib/context'
+import React, { useEffect, useState, useCallback } from 'react'
 import { Button } from '@chakra-ui/react'
 import debounce from 'lodash.debounce'
+import { useUserData } from '@lib/hooks'
 
 export default function EnterPage() {
-  const { user, username } = useContext(UserContext)
+  const { user, username } = useUserData()
 
   return <main>{user ? !username ? <UsernameForm /> : <SignOutButton /> : <SignInButton />}</main>
 }
@@ -38,7 +38,7 @@ const UsernameForm = () => {
   const [isValid, setIsValid] = useState(false)
   const [loading, setIsLoading] = useState(false)
 
-  const { user, username } = React.useContext(UserContext)
+  const { user, username } = useUserData()
 
   useEffect(() => {
     checkUsername(formValue)

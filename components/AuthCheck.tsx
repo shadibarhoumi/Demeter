@@ -1,6 +1,5 @@
 import Link from 'next/link'
-import { useContext } from 'react'
-import { UserContext } from '@lib/context'
+import { useUserData } from '@lib/hooks'
 
 type Props = {
   fallback?: JSX.Element
@@ -8,6 +7,6 @@ type Props = {
 
 // Component's children only shown to logged-in users
 export const AuthCheck: React.FC<Props> = ({ children, fallback }) => {
-  const { user } = useContext(UserContext)
+  const { user } = useUserData()
   return user ? <>{children}</> : fallback || <Link href="/login">You must be signed in</Link>
 }

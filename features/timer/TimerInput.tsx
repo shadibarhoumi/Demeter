@@ -1,13 +1,8 @@
 import { Slider, SliderFilledTrack, SliderThumb, SliderTrack } from '@chakra-ui/react'
-import { TimerStatus } from './useTimer'
+import { TimerStatus, useTimer } from './useTimer'
 
-interface Props {
-  status: TimerStatus
-  targetDuration: number
-  setTargetDuration: (duration: number) => void
-}
-
-export const TimerInput = ({ status, targetDuration, setTargetDuration }: Props) => {
+export const TimerInput = () => {
+  const { status, targetDuration, setTargetDuration } = useTimer()
   const minutesRemaining = targetDuration ? targetDuration / 60 : 0
   if (status !== TimerStatus.STOPPED) return null
   return (

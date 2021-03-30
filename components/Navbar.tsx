@@ -1,8 +1,7 @@
 import { Button, Flex, Text } from '@chakra-ui/react'
-import { useContext } from 'react'
 import { auth } from '@lib/firebase'
 import { useRouter } from 'next/router'
-import { UserContext } from '@lib/context'
+import { useUserData } from '@lib/hooks'
 
 const SignOutButton = () => {
   const router = useRouter()
@@ -24,7 +23,7 @@ const SignOutButton = () => {
 }
 
 export const Navbar: React.FC = () => {
-  const { user, username } = useContext(UserContext)
+  const { user, username } = useUserData()
 
   return (
     <Flex

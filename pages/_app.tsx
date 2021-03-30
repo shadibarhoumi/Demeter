@@ -3,19 +3,23 @@ import { ChakraProvider } from '@chakra-ui/react'
 import type { AppProps } from 'next/app'
 import { Toaster } from 'react-hot-toast'
 import { Navbar } from '@components/Navbar'
-import { UserContext } from '@lib/context'
-import { useUserData } from '@lib/hooks'
+import { Provider } from 'react-redux'
+import { useStore } from 'features/store'
+import React from 'react'
+import { fetchUserData } from '@lib/hooks'
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const userData = useUserData()
+  const store = useStore(pageProps.initialReduxState)
+  fetchUserData(store.dispatch)
+
   return (
-    <UserContext.Provider value={userData}>
+    <Provider store={store}>
       <ChakraProvider>
         <Navbar />
         <Component {...pageProps} />
         <Toaster />
       </ChakraProvider>
-    </UserContext.Provider>
+    </Provider>
   )
 }
 

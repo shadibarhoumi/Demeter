@@ -1,24 +1,33 @@
 import { auth, firestore } from '@lib/firebase'
 import { useAuthState } from 'react-firebase-hooks/auth'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect } from 'react'
+import type { Dispatch } from 'redux'
+import { setUser, setUsername } from '@features/user/userSlice'
+import { RootState } from '@features/store'
+import { useSelector } from 'react-redux'
 
-export const useUserData = () => {
+export const fetchUserData = (dispatch: Dispatch) => {
   const [user] = useAuthState(auth)
-  const [username, setUsername] = useState(null)
 
   useEffect(() => {
     // turn off realtime subscription
     let unsubscribe
     if (user) {
+      const { uid, displayName, photoURL } = user
+      dispatch(setUser({ uid, displayName, photoURL }))
       const ref = firestore.collection('users').doc(user.uid)
       unsubscribe = ref.onSnapshot((doc) => {
-        setUsername(doc.data()?.username)
+        dispatch(setUsername(doc.data()?.username))
       })
     } else {
-      setUsername(null)
+      dispatch(setUser(null))
+      dispatch(setUsername(null))
     }
     return unsubscribe
   }, [user])
+}
 
-  return { user, username }
+export const useUserData = () => {
+  const userData = useSelector((state: RootState) => state.userData)
+  return userData
 }
