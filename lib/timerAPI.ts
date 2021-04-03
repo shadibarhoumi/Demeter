@@ -48,10 +48,7 @@ export const saveAndDeleteInterval = async (
   await currentIntervalRef.delete()
 }
 
-export const updateInterval = async (
-  userId: string,
-  { status, secondsRemaining }: Pick<IntervalInput, 'status' | 'secondsRemaining'>,
-) => {
+export const updateInterval = async (userId: string, payload: Partial<IntervalInput>) => {
   const currentIntervalRef = firestore.collection('currentIntervals').doc(userId)
-  await currentIntervalRef.update({ status, secondsRemaining })
+  await currentIntervalRef.update({ ...payload })
 }

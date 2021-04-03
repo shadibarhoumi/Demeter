@@ -7,7 +7,7 @@ import { useUserData } from '@lib/hooks'
 export default function Home() {
   const { user } = useUserData()
   return (
-    <div className={styles.container}>
+    <>
       <Head>
         <title>StickyTime</title>
       </Head>
@@ -35,6 +35,6 @@ export default function Home() {
       <footer className={styles.footer}>
         <p>An SBWX Creation</p>
       </footer>
-    </div>
+    </>
   )
 }

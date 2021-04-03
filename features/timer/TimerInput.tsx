@@ -8,7 +8,7 @@ export const TimerInput = () => {
   return (
     <>
       <Slider
-        colorScheme="teal"
+        colorScheme="gray"
         flex="1"
         step={5}
         defaultValue={minutesRemaining}
@@ -16,6 +16,7 @@ export const TimerInput = () => {
         min={0.05}
         max={45}
         maxWidth="250px"
+        marginBottom="40px"
         focusThumbOnChange={false}
         onChange={(valueAsNumber: number) => {
           setTargetDuration(valueAsNumber * 60)

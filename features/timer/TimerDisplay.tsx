@@ -2,6 +2,8 @@ import React from 'react'
 import { TimerStatus, useTimer } from './useTimer'
 import { Box, Text } from '@chakra-ui/react'
 
+const { RUNNING, PAUSED, STOPPED } = TimerStatus
+
 const formatTime = (seconds: number) =>
   seconds.toLocaleString('en-US', {
     minimumIntegerDigits: 2,
@@ -12,7 +14,11 @@ const Time = ({ seconds, status }: { seconds: number; status: TimerStatus }) => 
   const minutesDisplay = formatTime(Math.floor(seconds / 60))
   const secondsDisplay = formatTime(seconds % 60)
   return (
-    <Text fontSize="90px" width="240px" color={status === TimerStatus.COMPLETE ? 'green' : 'teal.500'}>
+    <Text
+      fontSize={status === RUNNING || status === PAUSED ? '120px' : '95px'}
+      color="hsl(216deg 15% 30%)"
+      fontWeight={500}
+    >
       <span>{minutesDisplay}</span>
       <span>&#58;</span>
       <span>{secondsDisplay}</span>
@@ -22,16 +28,5 @@ const Time = ({ seconds, status }: { seconds: number; status: TimerStatus }) => 
 
 export const TimerDisplay = () => {
   const { status, secondsRemaining, targetDuration, description } = useTimer()
-  return (
-    <>
-      <Box width="240px" display="flex" flexDirection="column">
-        {(status === TimerStatus.RUNNING || status === TimerStatus.PAUSED) && description ? (
-          <Text>Working on: {description}</Text>
-        ) : status === TimerStatus.COMPLETE ? (
-          <Text color="green">Bam! Another interval complete!</Text>
-        ) : null}
-      </Box>
-      <Time seconds={status === TimerStatus.STOPPED ? targetDuration : secondsRemaining} status={status} />
-    </>
-  )
+  return <Time seconds={status === STOPPED ? targetDuration : secondsRemaining} status={status} />
 }
