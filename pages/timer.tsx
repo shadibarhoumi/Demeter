@@ -3,7 +3,7 @@ import { Timer } from 'features/timer/Timer'
 import { IntervalList } from 'features/dashboard/IntervalList'
 import { AuthCheck } from '@components/AuthCheck'
 
-export default function App() {
+export default function TimerPage() {
   return (
     <AuthCheck>
       <Timer />

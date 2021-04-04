@@ -7,12 +7,22 @@ import { TimerStatus, useTimer, useCountdown } from './useTimer'
 import { firestore } from '@lib/firebase'
 import { useUserData } from '@lib/hooks'
 import { IntervalInput } from '@models/Interval'
+import { getTimeDisplay } from '@lib/util'
+import Head from 'next/head'
 
 export const Timer = () => {
-  const { setStatus, setSecondsRemaining, setTargetDuration, setDescription, setStartedAt } = useTimer()
+  const {
+    setStatus,
+    setSecondsRemaining,
+    setTargetDuration,
+    setDescription,
+    setStartedAt,
+    secondsRemaining,
+    status,
+  } = useTimer()
   useCountdown()
   const [loading, setLoading] = useState(true)
-  const { RUNNING, COMPLETE } = TimerStatus
+  const { RUNNING, COMPLETE, STOPPED } = TimerStatus
   const { user } = useUserData()
 
   // fetch currentInterval, if exists, after first render
@@ -64,8 +74,13 @@ export const Timer = () => {
     return <p>Loading...</p>
   }
 
+  const { minutes, seconds } = getTimeDisplay(secondsRemaining)
+
   return (
     <>
+      <Head>
+        <title>{status !== STOPPED ? `${minutes}:${seconds}` : 'SpaceTime'}</title>
+      </Head>
       <Flex alignItems="center" flexDirection="column">
         <TimerDisplay />
         <TimerInput />
