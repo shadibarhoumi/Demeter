@@ -7,6 +7,7 @@ import { ThreeDButton } from '@components/ThreeDButton'
 import debounce from 'lodash.debounce'
 import { updateInterval } from '@lib/timerAPI'
 import { useUserData } from '@lib/hooks'
+import EditIcon from '@material-ui/icons/Edit'
 
 export const TimerButtons = () => {
   const { status, description, setDescription } = useTimer()
@@ -36,7 +37,14 @@ export const TimerButtons = () => {
     <>
       <Flex flexDirection="column" justifyContent="space-between">
         {status !== COMPLETE && (
-          <ThreeDButton onClick={() => dispatch(toggleTimer())}>
+          <ThreeDButton
+            onClick={() => {
+              if (status === STOPPED) {
+                setEditingDescription(false)
+              }
+              dispatch(toggleTimer())
+            }}
+          >
             {status === STOPPED ? 'Lift Off! ‍🚀' : status === RUNNING ? 'Pause 👽' : 'Resume'}
           </ThreeDButton>
         )}
@@ -55,7 +63,7 @@ export const TimerButtons = () => {
         )}
       </Flex>
 
-      <Box padding="50px 0">
+      <Box padding="50px 0" fontSize="22px">
         {canEditDescription && (
           <input
             type="text"
@@ -63,8 +71,7 @@ export const TimerButtons = () => {
               width: '350px',
               outline: 'none',
               lineHeight: '2',
-              fontSize: '25px',
-              fontWeight: 'bold',
+              fontSize: 'inherit',
               color: '#2D3748',
               borderBottom: '1px solid black',
             }}
@@ -87,20 +94,14 @@ export const TimerButtons = () => {
           <>
             <Text width="350px" fontSize="16px" letterSpacing="1px" color="grey" fontWeight="bold">
               Working On
-              <span
-                style={{
-                  marginLeft: '6px',
-                  textDecoration: 'underline',
-                  fontWeight: 'normal',
-                  cursor: 'pointer',
-                }}
+              <EditIcon
+                fontSize="small"
+                style={{ marginTop: '-5px', marginLeft: '4px', cursor: 'pointer' }}
                 onClick={() => setEditingDescription(true)}
-              >
-                Edit
-              </span>
+              />
             </Text>
 
-            <Text width="350px" fontSize="22px" paddingTop="6px">
+            <Text width="350px" fontSize="inherit" paddingTop="6px">
               {description}
             </Text>
           </>
