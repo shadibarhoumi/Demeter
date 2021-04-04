@@ -65,34 +65,39 @@ export const TimerButtons = () => {
 
       <Box padding="50px 0" fontSize="22px">
         {canEditDescription && (
-          <input
-            type="text"
-            style={{
-              width: '350px',
-              outline: 'none',
-              lineHeight: '2',
-              fontSize: 'inherit',
-              color: '#2D3748',
-              borderBottom: '1px solid black',
-            }}
-            ref={inputRef}
-            placeholder="What are you working on?"
-            value={description}
-            onChange={(e) => handleChange(e.target.value)}
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              if (e.key === 'Enter') {
-                if (status === STOPPED) {
-                  dispatch(toggleTimer())
+          <>
+            <Text width="350px" fontSize="16px" marginBottom="10px" letterSpacing="1px" color="grey">
+              What are you working on?
+            </Text>
+            <input
+              type="text"
+              style={{
+                width: '350px',
+                outline: 'none',
+                lineHeight: '2',
+                fontSize: 'inherit',
+                color: '#2D3748',
+                borderBottom: '1px solid black',
+              }}
+              ref={inputRef}
+              placeholder="e.g. reading, coding, blogging"
+              value={description}
+              onChange={(e) => handleChange(e.target.value)}
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                if (e.key === 'Enter') {
+                  if (status === STOPPED) {
+                    dispatch(toggleTimer())
+                  }
+                  setEditingDescription(false)
+                  inputRef.current?.blur()
                 }
-                setEditingDescription(false)
-                inputRef.current?.blur()
-              }
-            }}
-          />
+              }}
+            />
+          </>
         )}
         {!canEditDescription && (
           <>
-            <Text width="350px" fontSize="16px" letterSpacing="1px" color="grey" fontWeight="bold">
+            <Text width="350px" fontSize="16px" marginBottom="10px" letterSpacing="1px" color="grey">
               Working On
               <EditIcon
                 fontSize="small"
