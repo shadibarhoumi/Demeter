@@ -18,6 +18,7 @@ const Time = ({ seconds, status }: { seconds: number; status: TimerStatus }) => 
       fontSize={status === RUNNING || status === PAUSED ? '120px' : '95px'}
       color="hsl(216deg 15% 30%)"
       fontWeight={500}
+      transition="font-size 100ms"
     >
       <span>{minutesDisplay}</span>
       <span>&#58;</span>
