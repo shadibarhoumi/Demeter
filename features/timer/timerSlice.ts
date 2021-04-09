@@ -16,6 +16,7 @@ interface TimerState {
   targetDuration: number
   startedAt: number
   secondsRemaining: number
+  editingDescription: boolean
 }
 
 const DEFAULT_DURATION = 1500
@@ -26,6 +27,7 @@ export const timerInitialState: TimerState = {
   targetDuration: DEFAULT_DURATION,
   description: '',
   startedAt: Date.now(),
+  editingDescription: true,
 }
 
 const timerSlice = createSlice({
@@ -50,6 +52,9 @@ const timerSlice = createSlice({
     setTimerStartedAt(state, action: PayloadAction<number>) {
       state.startedAt = action.payload
     },
+    setTimerEditingDescription(state, action: PayloadAction<boolean>) {
+      state.editingDescription = action.payload
+    },
   },
 })
 
@@ -58,7 +63,6 @@ export const resetInterval = () => async (dispatch: Dispatch, getState: () => Ro
   if (status !== TimerStatus.COMPLETE) {
     const { uid } = getState().userData.user!
     const { description, targetDuration, secondsRemaining, startedAt } = getState().timer
-    dispatch(setTimerStatus(TimerStatus.STOPPED))
     await saveAndDeleteInterval(uid, {
       status: TimerStatus.STOPPED,
       description,
@@ -67,6 +71,8 @@ export const resetInterval = () => async (dispatch: Dispatch, getState: () => Ro
       startedAt,
     })
   }
+  dispatch(setTimerEditingDescription(true))
+  dispatch(setTimerStatus(TimerStatus.STOPPED))
 }
 
 export const completeInterval = () => async (dispatch: Dispatch, getState: () => RootState) => {
@@ -93,6 +99,7 @@ export const toggleTimer = () => async (dispatch: Dispatch, getState: () => Root
       dispatch(setTimerStatus(TimerStatus.RUNNING))
       const now = Date.now()
       dispatch(setTimerStartedAt(now))
+      dispatch(setTimerEditingDescription(false))
       await createInterval(uid, {
         status: TimerStatus.RUNNING,
         startedAt: now,
@@ -121,6 +128,7 @@ export const {
   setTimerDescription,
   setTimerSecondsRemaining,
   setTimerStartedAt,
+  setTimerEditingDescription,
 } = timerSlice.actions
 
 export default timerSlice.reducer

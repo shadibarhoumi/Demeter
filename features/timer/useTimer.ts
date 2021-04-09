@@ -10,6 +10,7 @@ import {
   setTimerSecondsRemaining,
   setTimerStartedAt,
   completeInterval,
+  setTimerEditingDescription,
 } from './timerSlice'
 export enum TimerStatus {
   RUNNING = 'RUNNING',
@@ -20,7 +21,7 @@ export enum TimerStatus {
 
 export const useTimer = () => {
   const dispatch = useDispatch()
-  const { status, secondsRemaining, targetDuration, description, startedAt } = useSelector(
+  const { status, secondsRemaining, targetDuration, description, editingDescription, startedAt } = useSelector(
     (state: RootState) => state.timer,
   )
 
@@ -32,6 +33,7 @@ export const useTimer = () => {
     [],
   )
   const setStartedAt = useCallback((startedAt: number) => dispatch(setTimerStartedAt(startedAt)), [])
+  const setEditingDescription = useCallback((editing: boolean) => dispatch(setTimerEditingDescription(editing)), [])
 
   return {
     status,
@@ -42,6 +44,8 @@ export const useTimer = () => {
     setTargetDuration,
     description,
     setDescription,
+    editingDescription,
+    setEditingDescription,
     startedAt,
     setStartedAt,
   }

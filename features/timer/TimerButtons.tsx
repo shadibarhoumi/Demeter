@@ -1,5 +1,5 @@
 import { Box, Button, Flex, Text } from '@chakra-ui/react'
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { TimerStatus, useTimer } from './useTimer'
 import { useDispatch } from 'react-redux'
 import { toggleTimer, resetInterval } from '@features/timer/timerSlice'
@@ -10,12 +10,11 @@ import { useUserData } from '@lib/hooks'
 import EditIcon from '@material-ui/icons/Edit'
 
 export const TimerButtons = () => {
-  const { status, description, setDescription } = useTimer()
+  const { status, description, setDescription, editingDescription, setEditingDescription } = useTimer()
   const { user } = useUserData()
   const dispatch = useDispatch()
   const inputRef = React.useRef<HTMLInputElement>(null)
   const { STOPPED, PAUSED, COMPLETE, RUNNING } = TimerStatus
-  const [editingDescription, setEditingDescription] = useState(false)
 
   const updateDescription = useCallback(
     debounce(async (description: string) => {
@@ -31,33 +30,20 @@ export const TimerButtons = () => {
     }
   }
 
-  const canEditDescription = status === STOPPED || editingDescription
+  // when COMPLETE, cannot edit description
+  // otherwise, can edit description when STOPPED or editingDescrition == true
+  const canEditDescription = status !== COMPLETE && (status === STOPPED || editingDescription)
 
   return (
     <>
       <Flex flexDirection="column" justifyContent="space-between">
         {status !== COMPLETE && (
-          <ThreeDButton
-            onClick={() => {
-              if (status === STOPPED) {
-                setEditingDescription(false)
-              }
-              dispatch(toggleTimer())
-            }}
-          >
+          <ThreeDButton onClick={() => dispatch(toggleTimer())}>
             {status === STOPPED ? 'Lift Off! ‍🚀' : status === RUNNING ? 'Pause 👽' : 'Resume'}
           </ThreeDButton>
         )}
         {(status === PAUSED || status === COMPLETE) && (
-          <Button
-            marginTop="10px"
-            colorScheme="gray"
-            onClick={() => {
-              dispatch(resetInterval())
-              setEditingDescription(true)
-            }}
-            variant="link"
-          >
+          <Button marginTop="10px" colorScheme="gray" onClick={() => dispatch(resetInterval())} variant="link">
             Reset
           </Button>
         )}
@@ -66,7 +52,7 @@ export const TimerButtons = () => {
       <Box padding="50px 0" fontSize="22px">
         {canEditDescription && (
           <>
-            <Text width="350px" fontSize="16px" marginBottom="10px" letterSpacing="1px" color="grey">
+            <Text width="350px" fontSize="16px" marginBottom="10px" letterSpacing="1px" color="hsl(0deg 0% 44%)">
               What are you working on?
             </Text>
             <input
@@ -99,11 +85,13 @@ export const TimerButtons = () => {
           <>
             <Text width="350px" fontSize="16px" marginBottom="10px" letterSpacing="1px" color="grey">
               Working On
-              <EditIcon
-                fontSize="small"
-                style={{ marginTop: '-5px', marginLeft: '4px', cursor: 'pointer' }}
-                onClick={() => setEditingDescription(true)}
-              />
+              {status !== COMPLETE && (
+                <EditIcon
+                  fontSize="small"
+                  style={{ marginTop: '-5px', marginLeft: '4px', cursor: 'pointer' }}
+                  onClick={() => setEditingDescription(true)}
+                />
+              )}
             </Text>
 
             <Text width="350px" fontSize="inherit" paddingTop="6px">
