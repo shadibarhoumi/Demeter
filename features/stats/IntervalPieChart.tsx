@@ -8,7 +8,7 @@ interface Props {
   intervals: Interval[]
 }
 
-export const DaySummary: React.FC<Props> = ({ intervals }: Props) => {
+export const IntervalPieChart: React.FC<Props> = ({ intervals }: Props) => {
   if (!intervals.length) {
     return null
   }

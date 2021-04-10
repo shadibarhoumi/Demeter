@@ -105,7 +105,7 @@ export const toggleTimer = () => async (dispatch: Dispatch, getState: () => Root
         startedAt: now,
         description,
         targetDuration,
-        secondsRemaining,
+        secondsRemaining: targetDuration,
       })
       break
     case TimerStatus.PAUSED:

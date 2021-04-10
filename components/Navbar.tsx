@@ -31,8 +31,8 @@ export const Navbar: React.FC = () => {
   return (
     <Flex flexDirection="row" alignItems="center" position="relative" padding="20px 30px">
       <img
-        src="saturn.png"
-        alt="User Photo"
+        src="/saturn.png"
+        alt="logo"
         style={{
           width: '50px',
           height: '50px',

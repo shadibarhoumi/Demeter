@@ -16,8 +16,8 @@ const getTime = (timestamp: number) => {
 
 export const IntervalTable = ({ intervals, deleteInterval }: Props) => (
   <>
-    <Text fontWeight="bold" margin="30px 0">
-      Your Intervals Today
+    <Text fontSize="1rem" margin="30px 0" letterSpacing="1px" color="hsl(0deg 0% 44%)">
+      Your time intervals
     </Text>
     <Table size="sm" variant="striped" maxWidth="500px">
       <Thead>
