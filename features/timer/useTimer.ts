@@ -53,7 +53,7 @@ export const useTimer = () => {
 
 export const useCountdown = () => {
   const dispatch = useDispatch()
-  const { status, secondsRemaining } = useTimer()
+  const { status, secondsRemaining, startedAt, targetDuration } = useTimer()
   // call decrement every second when timer is running
   useEffect(() => {
     let timer: number | undefined
@@ -66,8 +66,10 @@ export const useCountdown = () => {
   }, [status])
 
   useEffect(() => {
-    if (status === TimerStatus.RUNNING && secondsRemaining <= 0) {
+    // use intervalLength to ensure that completeInterval isn't dispatched before end of interval
+    const intervalLength = Date.now() - startedAt / 1000
+    if (status === TimerStatus.RUNNING && secondsRemaining <= 0 && intervalLength >= targetDuration) {
       dispatch(completeInterval())
     }
-  }, [secondsRemaining, status])
+  }, [secondsRemaining, targetDuration, startedAt, status])
 }

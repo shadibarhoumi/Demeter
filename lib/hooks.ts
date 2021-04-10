@@ -34,7 +34,10 @@ export const useUserData = () => {
   return userData
 }
 
-export const useUserIntervals = (userId: string) => {
+export const useUserIntervals = (userId?: string) => {
+  if (!userId) {
+    return { intervals: [], intervalsRef: null }
+  }
   const startOfToday = new Date().setHours(0, 0, 0, 0)
   const intervalsRef = firestore.collection('users').doc(userId).collection('intervals')
   const query = intervalsRef.where('startedAt', '>', startOfToday).orderBy('startedAt')

@@ -2,12 +2,15 @@ import React from 'react'
 import { Timer } from 'features/timer/Timer'
 import { IntervalStats } from '@features/dashboard/IntervalStats'
 import { AuthCheck } from '@components/AuthCheck'
+import { useUserData } from '@lib/hooks'
 
 export default function TimerPage() {
+  const { user } = useUserData()
+
   return (
     <AuthCheck>
       <Timer />
-      <IntervalStats />
+      <IntervalStats userId={user?.uid} />
     </AuthCheck>
   )
 }

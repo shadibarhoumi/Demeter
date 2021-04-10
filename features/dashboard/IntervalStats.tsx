@@ -1,15 +1,14 @@
 import { Flex } from '@chakra-ui/react'
 import React from 'react'
-import { useUserData, useUserIntervals } from '@lib/hooks'
+import { useUserIntervals } from '@lib/hooks'
 import { IntervalPieChart } from '@features/stats/IntervalPieChart'
 import { TotalTime } from '@features/stats/TotalTime'
 import { IntervalTable } from '@features/stats/IntervalTable'
 
-export const IntervalStats = () => {
-  const { user } = useUserData()
-  const { intervals, intervalsRef } = useUserIntervals(user!.uid)
+export const IntervalStats = ({ userId }: { userId?: string }) => {
+  const { intervals, intervalsRef } = useUserIntervals(userId)
 
-  if (!user || !intervals) {
+  if (!userId || !intervals || !intervalsRef) {
     return <p>Loading...</p>
   }
 

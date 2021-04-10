@@ -30,7 +30,7 @@ export const IntervalTable = ({ intervals, deleteInterval }: Props) => (
       <Tbody>
         {intervals.reverse().map((interval) => (
           <Tr>
-            <Td fontWeight="bold">{interval.description || 'Uncategorized'}</Td>
+            <Td>{interval.description || 'Uncategorized'}</Td>
             <Td>{getTimeString(interval.targetDuration - interval.secondsRemaining)}</Td>
             <Td>{`${getTime(interval.startedAt)} - ${getTime(interval.endedAt!)}`}</Td>
             <Td>
