@@ -8,6 +8,7 @@ import debounce from 'lodash.debounce'
 import { updateInterval } from '@lib/timerAPI'
 import { useUserData } from '@lib/hooks'
 import EditIcon from '@material-ui/icons/Edit'
+import { Autocomplete } from '@components/Autocomplete'
 
 export const TimerButtons = () => {
   const { status, description, setDescription, editingDescription, setEditingDescription } = useTimer()
@@ -50,6 +51,7 @@ export const TimerButtons = () => {
       </Flex>
 
       <Box padding="50px 0" fontSize="22px">
+        <Autocomplete />
         {canEditDescription && (
           <>
             <Text width="350px" fontSize="16px" marginBottom="10px" letterSpacing="1px" color="hsl(0deg 0% 44%)">

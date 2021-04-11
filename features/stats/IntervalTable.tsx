@@ -29,7 +29,7 @@ export const IntervalTable = ({ intervals, deleteInterval }: Props) => (
       </Thead>
       <Tbody>
         {intervals.reverse().map((interval) => (
-          <Tr>
+          <Tr key={interval.startedAt}>
             <Td>{interval.description || 'Uncategorized'}</Td>
             <Td>{getTimeString(interval.targetDuration - interval.secondsRemaining)}</Td>
             <Td>{`${getTime(interval.startedAt)} - ${getTime(interval.endedAt!)}`}</Td>
