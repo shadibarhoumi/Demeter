@@ -9,10 +9,6 @@ interface OptionItemProps {
 const OptionItem = styled.div<OptionItemProps>`
   padding-left: 5px;
   background-color: ${({ selected }) => (selected ? 'lightgray' : 'white')};
-
-  &:hover {
-    background-color: lightgray;
-  }
 `
 
 const Option = ({
@@ -20,11 +16,15 @@ const Option = ({
   matchIndices,
   handleSelect,
   selected,
+  setSelectedIndex,
+  index,
 }: {
   text: string
   matchIndices: number[]
   handleSelect: (option: string) => void
   selected: boolean
+  setSelectedIndex: (index: number) => void
+  index: number
 }) => {
   let part = ''
   let curInd = 0
@@ -45,7 +45,12 @@ const Option = ({
     }
   }
   return (
-    <OptionItem selected={selected} key={text} onMouseDown={() => handleSelect(text)}>
+    <OptionItem
+      selected={selected}
+      key={text}
+      onMouseEnter={() => setSelectedIndex(index)}
+      onMouseDown={() => handleSelect(text)}
+    >
       {toRender}
     </OptionItem>
   )
@@ -55,10 +60,12 @@ const OptionsList = ({
   matches,
   selectedIndex,
   handleSelect,
+  setSelectedIndex,
 }: {
   matches: Match[]
   selectedIndex: number
   handleSelect: (option: string) => void
+  setSelectedIndex: (index: number) => void
 }) => {
   return (
     <div
@@ -70,13 +77,15 @@ const OptionsList = ({
         zIndex: 99,
       }}
     >
-      {matches.map(({ text, matchIndices }, i) => (
+      {matches.map(({ text, matchIndices }, index) => (
         <Option
           key={text}
           text={text}
           handleSelect={handleSelect}
-          selected={selectedIndex === i}
+          selected={selectedIndex === index}
           matchIndices={matchIndices}
+          setSelectedIndex={setSelectedIndex}
+          index={index}
         />
       ))}
     </div>
@@ -136,6 +145,7 @@ export const Autocomplete: React.FC = () => {
         <OptionsList
           matches={matches}
           selectedIndex={selectedIndex}
+          setSelectedIndex={(index: number) => setSelectedIndex(index)}
           handleSelect={(option: string) => setInput(option)}
         />
       )}
