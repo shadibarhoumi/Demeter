@@ -1,8 +1,14 @@
-import React, { useState } from 'react'
+import { findMatches, Match } from '@lib/util'
+import React, { useRef, useState } from 'react'
 import styled from 'styled-components'
 
-const OptionDiv = styled.div`
+interface OptionItemProps {
+  selected: boolean
+}
+
+const OptionItem = styled.div<OptionItemProps>`
   padding-left: 5px;
+  background-color: ${({ selected }) => (selected ? 'lightgray' : 'white')};
 
   &:hover {
     background-color: lightgray;
@@ -10,69 +16,50 @@ const OptionDiv = styled.div`
 `
 
 const Option = ({
-  option,
+  text,
   matchIndices,
-  onSelect,
+  handleSelect,
+  selected,
 }: {
-  option: string
+  text: string
   matchIndices: number[]
-  onSelect: () => void
+  handleSelect: (option: string) => void
+  selected: boolean
 }) => {
   let part = ''
   let curInd = 0
   let toRender: JSX.Element[] = []
-  for (let i = 0; i < option.length; i++) {
+  for (let i = 0; i < text.length; i++) {
     if (i !== matchIndices[curInd]) {
-      part += option[i]
+      part += text[i]
+      if (part && i == text.length - 1) toRender.push(<span key={text}>{part}</span>)
     } else {
       if (part) toRender.push(<span key={i - 1}>{part}</span>)
       toRender.push(
         <span key={i} style={{ fontWeight: 'bold' }}>
-          {option[i]}
+          {text[i]}
         </span>,
       )
       part = ''
       curInd++
     }
   }
-  if (part) toRender.push(<span key={option.length}>{part}</span>)
   return (
-    <OptionDiv key={option} onMouseDown={onSelect}>
+    <OptionItem selected={selected} key={text} onMouseDown={() => handleSelect(text)}>
       {toRender}
-    </OptionDiv>
+    </OptionItem>
   )
 }
 
-const matchStrings = (prefix: string, candidate: string) => {
-  let j = 0 // index into candidate string
-  let matchIndices = []
-  for (let i = 0; i < prefix.length; i++) {
-    while (candidate[j] !== prefix[i]) {
-      j++
-      if (j >= candidate.length) {
-        return { isMatch: false, matchIndices }
-      }
-    }
-    matchIndices.push(j)
-    j++
-  }
-  return { isMatch: true, matchIndices }
-}
-
 const OptionsList = ({
-  options,
-  input,
+  matches,
+  selectedIndex,
   handleSelect,
 }: {
-  options: string[]
-  input: string
+  matches: Match[]
+  selectedIndex: number
   handleSelect: (option: string) => void
 }) => {
-  let matches = options.map((option) => matchStrings(input, option))
-  const matchingOptions = options.filter((_, i) => matches[i].isMatch)
-  matches = matches.filter((match) => match.isMatch)
-  if (!matchingOptions.length) return null
-
   return (
     <div
       style={{
@@ -83,12 +70,13 @@ const OptionsList = ({
         zIndex: 99,
       }}
     >
-      {matchingOptions.map((option, i) => (
+      {matches.map(({ text, matchIndices }, i) => (
         <Option
-          key={option}
-          option={option}
-          matchIndices={matches[i].matchIndices}
-          onSelect={() => handleSelect(option)}
+          key={text}
+          text={text}
+          handleSelect={handleSelect}
+          selected={selectedIndex === i}
+          matchIndices={matchIndices}
         />
       ))}
     </div>
@@ -109,20 +97,48 @@ export const Autocomplete: React.FC = () => {
     'bob',
     'rachel',
   ]
+  const inputRef = useRef<HTMLInputElement>(null)
   const [isFocused, setIsFocused] = useState(false)
-  const [selected, setSelected] = useState('')
-  const displayDropdown = isFocused && selected.length > 1
+  const [input, setInput] = useState('')
+  const [selectedIndex, setSelectedIndex] = useState(0)
+
+  const matches = findMatches(input, options)
+  const displayDropdown = isFocused && input.length > 1 && matches.length > 0
 
   return (
     <>
       <input
+        ref={inputRef}
         onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
+        onBlur={() => {
+          setIsFocused(false)
+          setSelectedIndex(0)
+        }}
         style={{ borderBottom: '1px solid red', padding: '5px' }}
-        value={selected}
-        onChange={(e: React.FormEvent<HTMLInputElement>) => setSelected(e.currentTarget.value)}
+        value={input}
+        onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+          if (e.key === 'ArrowDown') {
+            e.preventDefault()
+            setSelectedIndex((selectedIndex) => (selectedIndex === matches.length - 1 ? 0 : selectedIndex + 1))
+          } else if (e.key === 'ArrowUp') {
+            e.preventDefault()
+            setSelectedIndex((selectedIndex) => (selectedIndex === 0 ? matches.length - 1 : selectedIndex - 1))
+          } else if (e.key === 'Enter') {
+            if (matches.length > 0) {
+              setInput(matches[selectedIndex].text)
+            }
+            inputRef.current?.blur()
+          }
+        }}
+        onChange={(e: React.FormEvent<HTMLInputElement>) => setInput(e.currentTarget.value)}
       />
-      {displayDropdown && <OptionsList input={selected} options={options} handleSelect={setSelected} />}
+      {displayDropdown && (
+        <OptionsList
+          matches={matches}
+          selectedIndex={selectedIndex}
+          handleSelect={(option: string) => setInput(option)}
+        />
+      )}
     </>
   )
 }

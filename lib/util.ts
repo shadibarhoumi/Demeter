@@ -40,3 +40,35 @@ export const getTotalTime = (intervals: Interval[]) => {
     return total + interval.targetDuration - interval.secondsRemaining
   }, 0)
 }
+
+export const fuzzyMatch = (prefix: string, candidate: string): [boolean, number[]] => {
+  let j = 0 // index into candidate string
+  let matchIndices = []
+  for (let i = 0; i < prefix.length; i++) {
+    while (candidate[j] !== prefix[i]) {
+      j++
+      if (j >= candidate.length) {
+        return [false, matchIndices]
+      }
+    }
+    matchIndices.push(j)
+    j++
+  }
+  return [true, matchIndices]
+}
+
+export interface Match {
+  text: string
+  matchIndices: number[]
+}
+
+export const findMatches = (input: string, candidates: string[]) => {
+  const matches: Match[] = []
+  candidates.forEach((candidate) => {
+    const [isMatch, matchIndices] = fuzzyMatch(input, candidate)
+    if (isMatch) {
+      matches.push({ text: candidate, matchIndices })
+    }
+  })
+  return matches
+}
