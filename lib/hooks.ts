@@ -7,6 +7,7 @@ import { RootState } from '@features/store'
 import { useSelector } from 'react-redux'
 import { useCollectionData } from 'react-firebase-hooks/firestore'
 import { Interval } from '@models/Interval'
+import type firebase from 'firebase/app'
 
 export const fetchUserData = (dispatch: Dispatch) => {
   const [user] = useAuthState(auth)
@@ -34,7 +35,12 @@ export const useUserData = () => {
   return userData
 }
 
-export const useUserIntervals = (userId?: string) => {
+export const useUserIntervals = (
+  userId?: string,
+): {
+  intervals: Interval[]
+  intervalsRef: firebase.firestore.CollectionReference<firebase.firestore.DocumentData> | null
+} => {
   if (!userId) {
     return { intervals: [], intervalsRef: null }
   }
@@ -42,5 +48,5 @@ export const useUserIntervals = (userId?: string) => {
   const intervalsRef = firestore.collection('users').doc(userId).collection('intervals')
   const query = intervalsRef.where('startedAt', '>', startOfToday).orderBy('startedAt')
   const [intervals, loadingIntervals, error] = useCollectionData<Interval>(query, { idField: 'id' })
-  return { intervals, intervalsRef }
+  return { intervals: intervals ? intervals : [], intervalsRef }
 }

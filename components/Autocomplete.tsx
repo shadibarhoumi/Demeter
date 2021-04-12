@@ -95,20 +95,12 @@ const OptionsList = ({
   )
 }
 
-export const Autocomplete: React.FC = () => {
-  const options = [
-    'wuyan',
-    'shadi',
-    'samuel',
-    'shaker',
-    'shannon',
-    'shearer',
-    'wuming',
-    'wooyan',
-    'jim',
-    'bob',
-    'rachel',
-  ]
+interface Props {
+  options: string[]
+  onSelected: (option: string) => void
+}
+
+export const Autocomplete: React.FC<Props> = ({ options, onSelected }) => {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isFocused, setIsFocused] = useState(false)
   const [input, setInput] = useState('')
@@ -140,6 +132,7 @@ export const Autocomplete: React.FC = () => {
               setInput(matches[selectedIndex].text)
             }
             inputRef.current?.blur()
+            onSelected(matches[selectedIndex].text)
           }
         }}
         onChange={(e: React.FormEvent<HTMLInputElement>) => setInput(e.currentTarget.value)}
