@@ -49,7 +49,10 @@ const Option = ({
       selected={selected}
       key={text}
       onMouseEnter={() => setSelectedIndex(index)}
-      onMouseDown={() => handleSelect(text)}
+      onMouseDown={() => {
+        handleSelect(text)
+        setSelectedIndex(0)
+      }}
     >
       {toRender}
     </OptionItem>
@@ -112,7 +115,7 @@ export const Autocomplete: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState(0)
 
   const matches = findMatches(input, options)
-  const displayDropdown = isFocused && input.length > 1 && matches.length > 0
+  const displayDropdown = isFocused && input.length > 1 && matches.length > 0 && input !== matches[0].text
 
   return (
     <>
