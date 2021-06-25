@@ -91,11 +91,12 @@ const Shadow = styled.span`
 
 interface Props {
   onClick?: () => any
+  style?: React.CSSProperties
 }
 
-export const ThreeDButton: React.FC<Props> = ({ children, onClick }) => {
+export const ThreeDButton: React.FC<Props> = ({ children, onClick, style }) => {
   return (
-    <Button onClick={onClick}>
+    <Button onClick={onClick} style={style}>
       <Shadow></Shadow>
       <Edge></Edge>
       <Front>{children}</Front>

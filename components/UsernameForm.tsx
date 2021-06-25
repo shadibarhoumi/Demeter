@@ -1,39 +1,11 @@
-import { firestore, auth, googleAuthProvider } from '@lib/firebase'
+import { firestore } from '@lib/firebase'
 import toast from 'react-hot-toast'
 import React, { useEffect, useState, useCallback } from 'react'
 import { Button } from '@chakra-ui/react'
 import debounce from 'lodash.debounce'
 import { useUserData } from '@lib/hooks'
 
-export default function EnterPage() {
-  const { user, username } = useUserData()
-
-  return <main>{user ? !username ? <UsernameForm /> : <SignOutButton /> : <SignInButton />}</main>
-}
-
-const SignInButton = () => {
-  const signInWithGoogle = async () => {
-    try {
-      await auth.signInWithPopup(googleAuthProvider)
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        toast.error('An error occurred: ' + error.message)
-      }
-    }
-  }
-
-  return (
-    <button onClick={signInWithGoogle}>
-      <img src={'/google.png'} alt="Google Logo" /> Sign in with Google
-    </button>
-  )
-}
-
-const SignOutButton = () => {
-  return <button onClick={() => auth.signOut()}>Sign Out</button>
-}
-
-const UsernameForm = () => {
+export const UsernameForm = () => {
   const [formValue, setFormValue] = useState('')
   const [isValid, setIsValid] = useState(false)
   const [loading, setIsLoading] = useState(false)
